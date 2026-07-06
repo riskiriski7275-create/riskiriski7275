@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MAFIA SootheWave</title>
+    <!-- Memanggil Font Awesome untuk memunculkan logo/ikon aplikasi -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        /* --- RESET & FONTS --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: #020203;
+            color: #ffffff;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* --- GLOW MERAH BESAR BERGERAK PELAN & BLUR MERAH (BACKGROUND AURA) --- */
+        .ambient-glow {
+            position: fixed;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(255, 17, 17, 0.25) 0%, rgba(255, 17, 17, 0.05) 50%, rgba(0, 0, 0, 0) 70%);
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: -2;
+            animation: moveGlow 12s ease-in-out infinite alternate;
+        }
+
+        @keyframes moveGlow {
+            0% { transform: translate(-20%, -20%) scale(1); }
+            50% { transform: translate(20%, 15%) scale(1.2); }
+            100% { transform: translate(-10%, 25%) scale(0.9); }
+        }
+
+        /* --- BACKGROUND GRADIENT & ANIMASI PARTIKEL METEOR BANYAK (RED NEON) --- */
+        .bg-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at center, rgba(30, 3, 3, 0.6) 0%, #020203 100%);
+        }
+
+        .particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+        }
+
+        .particles li {
+            position: absolute;
+            list-style: none;
+            width: 3px;
+            height: 3px;
+            background: #ff1111;
+            opacity: 0;
+            bottom: -20px;
+            animation: floatUp 10s linear infinite;
+            border-radius: 50%;
+            box-shadow: 0 0 15px #ff1111, 0 0 30px #ff1111;
+        }
+
+        /* 20 variasi partikel sebaran acak */
+        .particles li:nth-child(1) { left: 5%; width: 4px; height: 4px; animation-delay: 0s; animation-duration: 8s; }
+        .particles li:nth-child(2) { left: 12%; width: 2px; height: 2px; animation-delay: 2s; animation-duration: 6s; }
+        .particles li:nth-child(3) { left: 20%; width: 5px; height: 5px; animation-delay: 0.5s; animation-duration: 11s; }
+        .particles li:nth-child(4) { left: 28%; width: 3px; height: 3px; animation-delay: 4s; animation-duration: 7s; }
+        .particles li:nth-child(5) { left: 35%; width: 4px; height: 4px; animation-delay: 1.5s; animation-duration: 9s; }
+        .particles li:nth-child(6) { left: 42%; width: 2px; height: 2px; animation-delay: 3s; animation-duration: 5s; }
+        .particles li:nth-child(7) { left: 50%; width: 6px; height: 6px; animation-delay: 5s; animation-duration: 12s; }
+        .particles li:nth-child(8) { left: 58%; width: 3px; height: 3px; animation-delay: 2.5s; animation-duration: 8s; }
+        .particles li:nth-child(9) { left: 65%; width: 5px; height: 5px; animation-delay: 1s; animation-duration: 10s; }
+        .particles li:nth-child(10) { left: 72%; width: 2px; height: 2px; animation-delay: 4.5s; animation-duration: 6s; }
+        .particles li:nth-child(11) { left: 78%; width: 4px; height: 4px; animation-delay: 0.2s; animation-duration: 9s; }
+        .particles li:nth-child(12) { left: 85%; width: 3px; height: 3px; animation-delay: 3.5s; animation-duration: 7s; }
+        .particles li:nth-child(13) { left: 92%; width: 5px; height: 5px; animation-delay: 1.8s; animation-duration: 11s; }
+        .particles li:nth-child(14) { left: 18%; width: 4px; height: 4px; animation-delay: 5.5s; animation-duration: 10s; }
+        .particles li:nth-child(15) { left: 31%; width: 2px; height: 2px; animation-delay: 6s; animation-duration: 8s; }
+        .particles li:nth-child(16) { left: 47%; width: 5px; height: 5px; animation-delay: 2.2s; animation-duration: 12s; }
+        .particles li:nth-child(17) { left: 62%; width: 3px; height: 3px; animation-delay: 7s; animation-duration: 9s; }
+        .particles li:nth-child(18) { left: 69%; width: 4px; height: 4px; animation-delay: 3.8s; animation-duration: 7s; }
+        .particles li:nth-child(19) { left: 81%; width: 2px; height: 2px; animation-delay: 8s; animation-duration: 6s; }
+        .particles li:nth-child(20) { left: 96%; width: 5px; height: 5px; animation-delay: 0.8s; animation-duration: 11s; }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0) scale(0.8); opacity: 0; }
+            20% { opacity: 0.8; }
+            80% { opacity: 0.8; }
+            100% { transform: translateY(-105vh) scale(1.2); opacity: 0; }
+        }
+
+        /* --- CONTAINER UTAMA (CAHAYA HIDUP & EXTREME NEON GLOW) --- */
+        .card-container {
+            width: 100%;
+            max-width: 420px;
+            padding: 35px 25px;
+            text-align: center;
+            z-index: 1;
+            background: rgba(8, 4, 4, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 17, 17, 0.35);
+            box-shadow: 0 0 50px rgba(255, 17, 17, 0.3), inset 0 0 25px rgba(255, 17, 17, 0.15), 0 25px 60px rgba(0, 0, 0, 0.95);
+            margin: 20px;
+            animation: containerGlow 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes containerGlow {
+            0% { border-color: rgba(255, 17, 17, 0.25); box-shadow: 0 0 40px rgba(255, 17, 17, 0.25), 0 25px 60px rgba(0, 0, 0, 0.95); }
+            100% { border-color: rgba(255, 17, 17, 0.6); box-shadow: 0 0 65px rgba(255, 17, 17, 0.5), 0 25px 60px rgba(0, 0, 0, 0.95); }
+        }
+
+        /* Avatar / Foto Profil dengan Pulse Aura Glow */
+        .avatar {
+            width: 115px;
+            height: 115px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #ff1111;
+            box-shadow: 0 0 30px rgba(255, 17, 17, 0.8), 0 0 50px rgba(255, 17, 17, 0.4);
+            margin-bottom: 20px;
+            animation: avatarPulse 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes avatarPulse {
+            0% { box-shadow: 0 0 25px rgba(255, 17, 17, 0.6), 0 0 45px rgba(255, 17, 17, 0.3); }
+            100% { box-shadow: 0 0 40px rgba(255, 17, 17, 0.9), 0 0 70px rgba(255, 17, 17, 0.6); }
+        }
+
+        /* Teks Nama Menyala Super Tajam */
+        .name {
+            font-size: 1.6rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            margin-bottom: 6px;
+            color: #ffffff;
+            text-shadow: 0 0 15px #ff1111, 0 0 30px rgba(255, 17, 17, 0.7), 0 0 50px rgba(255, 17, 17, 0.5);
+        }
+
+        .subtitle {
+            font-size: 0.85rem;
+            color: #ccc9d2;
+            margin-bottom: 30px;
+            font-weight: 400;
+            letter-spacing: 0.8px;
+            text-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
+        }
+
+        /* --- TOMBOL LINK DENGAN TEXT & LOGO DI TENGAH (CENTERED) --- */
+        .links-group {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .link-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            padding: 14px 20px;
+            background: rgba(255, 17, 17, 0.02);
+            text-decoration: none;
+            color: #e8e8f0;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            border: 1px solid rgba(255, 17, 17, 0.15);
+            letter-spacing: 0.8px;
+        }
+
+        .link-item i {
+            font-size: 1.1rem;
+            color: #ff1111;
+            text-shadow: 0 0 8px #ff1111;
+            transition: 0.3s;
+        }
+
+        .link-item:hover {
+            background: rgba(255, 17, 17, 0.18);
+            color: #ffffff;
+            border-color: #ff1111;
+            transform: translateY(-3px);
+            box-shadow: 0 0 25px rgba(255, 17, 17, 0.6), inset 0 0 10px rgba(255, 17, 17, 0.3);
+            text-shadow: 0 0 5px #fff;
+        }
+
+        .link-item:hover i {
+            color: #ffffff;
+            text-shadow: 0 0 8px #fff;
+        }
+
+        /* --- AUDIO WAVES BAR (EXTREME RED GLOW) --- */
+        .wave-container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            height: 40px;
+            gap: 4px;
+            cursor: pointer;
+            padding: 10px;
+            margin-top: 25px;
+        }
+
+        .bar {
+            width: 4px;
+            height: 5px;
+            background-color: #ff1111;
+            border-radius: 2px;
+            transition: height 0.2s ease;
+            box-shadow: 0 0 12px #ff1111, 0 0 25px #ff1111;
+        }
+
+        .wave-container.playing .bar {
+            animation: bounce 1.2s ease-in-out infinite alternate;
+        }
+
+        .wave-container.playing .bar:nth-child(1) { animation-delay: 0.1s; }
+        .wave-container.playing .bar:nth-child(2) { animation-delay: 0.4s; }
+        .wave-container.playing .bar:nth-child(3) { animation-delay: 0.2s; }
+        .wave-container.playing .bar:nth-child(4) { animation-delay: 0.6s; }
+        .wave-container.playing .bar:nth-child(5) { animation-delay: 0.3s; }
+        .wave-container.playing .bar:nth-child(6) { animation-delay: 0.5s; }
+
+        @keyframes bounce {
+            0% { height: 5px; }
+            100% { height: 35px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Glow Merah Besar Bergerak Pelan & Blur Merah -->
+    <div class="ambient-glow"></div>
+
+    <!-- Background Animasi Banyak Partikel -->
+    <div class="bg-overlay">
+        <ul class="particles">
+            <li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li>
+            <li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li>
+        </ul>
+    </div>
+
+    <!-- Kotak Profil Utama -->
+    <div class="card-container">
+        <!-- Foto Profil -->
+        <img src="avatar.jpg.jpg" alt="Profile Avatar" class="avatar">
+        
+        <div class="name">L1smosss411</div>
+        <div class="subtitle">dont look back.</div>
+
+        <!-- Tautan Sosial Media Terlindungi Ekstra Security -->
+        <div class="links-group">
+            <a href="https://www.instagram.com/l1smosss411/" target="_blank" rel="noopener noreferrer" class="link-item">
+                <i class="fa-brands fa-instagram"></i>Instagram
+            </a>
+            <a href="https://www.tiktok.com/@lismos411_" target="_blank" rel="noopener noreferrer" class="link-item">
+                <i class="fa-brands fa-tiktok"></i>TikTok
+            </a>
+            <a href="https://discord.gg/vQMvFn68u4" target="_blank" rel="noopener noreferrer" class="link-item">
+                <i class="fa-brands fa-discord"></i>Discord
+            </a>
+            <a href="https://www.whatsapp.com/channel/0029VbCihBGGpLHH0fr2MS42" target="_blank" rel="noopener noreferrer" class="link-item">
+                <i class="fa-brands fa-whatsapp"></i>Saluran WhatsApp
+            </a>
+            <a href="https://sociabuzz.com/l1smoss/tribe" target="_blank" rel="noopener noreferrer" class="link-item">
+                <i class="fa-solid fa-heart"></i>SociaBuzz
+            </a>
+        </div>
+
+        <!-- Tombol Musik Garis Spektrum Merah -->
+        <div class="wave-container" id="audioControl">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+            
+            <audio id="bgm" loop>
+                <source src="dj-remix.mp3.mp3" type="audio/mpeg">
+            </audio>
+        </div>
+    </div>
+
+    <script>
+        const audio = document.getElementById('bgm');
+        const controlBtn = document.getElementById('audioControl');
+
+        // Musik otomatis berputar saat interaksi pertama dengan halaman
+        window.addEventListener('load', () => {
+            document.body.addEventListener('click', () => {
+                if (audio.paused) {
+                    audio.play().then(() => {
+                        controlBtn.classList.add('playing');
+                    }).catch(err => console.log("Menunggu interaksi..."));
+                }
+            }, { once: true });
+        });
+
+        // Kontrol klik manual pada area bar untuk Pause/Play
+        controlBtn.addEventListener('click', function(e) {
+            e.stopPropagation(); 
+            if (audio.paused) {
+                audio.play().then(() => {
+                    controlBtn.classList.add('playing');
+                }).catch(err => {
+                    console.log("File audio tidak ditemukan.");
+                });
+            } else {
+                audio.pause();
+                controlBtn.classList.remove('playing');
+            }
+        });
+    </script>
+</body>
+</html>
